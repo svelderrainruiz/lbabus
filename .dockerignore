@@ -1,0 +1,10 @@
+# Docker build-context excludes. The repository root is the build context for the tools/collab-cli/ci harness
+# and the lean verify images (ci/Dockerfile.windows, ci/Dockerfile.linux), which publish INSIDE the container,
+# so a stale host bin/obj (whose project.assets.json carries host NuGet paths) must never enter the context.
+# Do NOT exclude what the builds COPY: tools/ and docs/ (the CLI embeds docs/requirements/*).
+.git
+tools/collab-cli/bin
+tools/collab-cli/obj
+tools/collab-cli/**/bin
+tools/collab-cli/**/obj
+tools/collab-cli/ci/results

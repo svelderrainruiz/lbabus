@@ -1,7 +1,7 @@
 # lbabus Docker-CI edge-case harness
 
 A declarative, dependency-free harness that runs the `lbabus` CLI through edge cases in a hermetic
-container and **gates every `collab-cli-v*` release** on the result. It grows over time; **both planes
+container and **gates every `vX.Y.Z` release** on the result. It grows over time; **both planes
 add cases** (one file per case, so nobody edits a shared manifest and there are no merge conflicts).
 
 ## Layout
@@ -38,7 +38,7 @@ docker build -f tools/collab-cli/ci/Dockerfile --target ci-stress .
 docker build -f tools/collab-cli/ci/Dockerfile --target ci-musl   .
 ```
 
-The runner is **hermetic**: it strips ambient `LBABUS_*` / `VIHS_*` / `GH_TOKEN` / `GITHUB_TOKEN` from
+The runner is **hermetic**: it strips ambient `LBABUS_*` / `COLLAB_*` / `GH_TOKEN` / `GITHUB_TOKEN` from
 each child so a stray host variable (e.g. a leaked `LBABUS_SKIP_VERSION_CHECK`) cannot contaminate a case.
 
 ## Case schema
@@ -65,7 +65,7 @@ each child so a stray host variable (e.g. a leaked `LBABUS_SKIP_VERSION_CHECK`) 
 ```
 
 For mock-requiring cases the runner injects `LBABUS_GITHUB_API=<endpoint>` automatically; the case just
-declares the fixture repo it targets via `VIHS_COLLAB_OWNER` / `VIHS_COLLAB_REPO`.
+declares the fixture repo it targets via `COLLAB_OWNER` / `COLLAB_REPO`.
 
 ## Ownership split (converged on #10)
 

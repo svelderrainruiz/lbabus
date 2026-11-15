@@ -5,6 +5,7 @@ on:
   push:
     branches: [main, develop]
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -25,6 +26,22 @@ jobs:
       - name: Build the ${{ matrix.target }} harness stage
         run: docker build -f tools/collab-cli/ci/Dockerfile --target "${{ matrix.target }}" .
 
+  selftests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Mesh actor typed-peer routing
+        run: bash tools/collab-cli/ci/mesh-actor-typed-peers.selftest.sh
+      - name: No VIHS identifiers or Discussion-era message name
+        run: |
+          if git grep -nE 'VIHS|vihs-collab-msg' -- ':!.github/workflows/ci.yml'; then
+            echo "::error::Remove the VIHS prefix (#3) and the retired vihs-collab-msg name (#4)." >&2
+            exit 1
+          fi
+
   windows:
     runs-on: windows-latest
     timeout-minutes: 20
@@ -42,6 +59,7 @@ jobs:
           dotnet build tools/collab-cli/LbaBus.csproj -c Release -o out -nologo
           if ($LASTEXITCODE -ne 0) { throw "build failed ($LASTEXITCODE)" }
           dotnet out/lbabus.dll version
+          if ($LASTEXITCODE -ne 0) { throw "version failed ($LASTEXITCODE)" }
           dotnet out/lbabus.dll agents --out "$env:RUNNER_TEMP/AGENTS.md"
           dotnet out/lbabus.dll agents --check "$env:RUNNER_TEMP/AGENTS.md"
           if ($LASTEXITCODE -ne 0) { throw 'agents round-trip failed' }

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Per-actor workload for the isolated-actor lbabus TCP/UDP MESH test -- Linux parity of ci/mesh-actor.ps1.
 #
-# Each container runs ONE copy under a distinct actor identity (VIHS_COLLAB_AGENT), fully ISOLATED -- no
+# Each container runs ONE copy under a distinct actor identity (COLLAB_AGENT), fully ISOLATED -- no
 # shared volume, no shared store. Actors coordinate ONLY through collab-cli's TCP/UDP bus (`lbabus net`,
 # ADR-0003/0004, the bus-msg@1 envelope), resolving each other by container name on a user-defined `bridge`
 # network.
@@ -59,7 +59,7 @@ run_lbabus() {
 bind_arg=""
 [ -n "$MESH_BIND" ] && bind_arg="--bind $MESH_BIND"
 
-actor="${VIHS_COLLAB_AGENT:-actor-$$}"
+actor="${COLLAB_AGENT:-actor-$$}"
 
 # --- Role brief (opt-in): the actor's name -> a more specific AGENTS.md ---------------------------------
 # When a role is known, materialize the pinned base instructions PLUS the matching role overlay so this

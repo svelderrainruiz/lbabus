@@ -7,7 +7,7 @@ hand-edit a materialized copy — iterate the source in `tools/collab-cli/agents
 and cut a new release. Verify a local copy with `lbabus agents --check <path>`.
 
 ## Identity & version
-- Set `VIHS_COLLAB_AGENT` to your plane (`WIN` or `LINUX`) before any bus call.
+- Set `COLLAB_AGENT` to your plane (`WIN` or `LINUX`) before any bus call.
 - **A commit can name the actor.** Add an `Actor: <role>` trailer to a commit message and any actor built
   from that commit derives its role from it — `lbabus agents --role-from-commit` (reads the `Actor:` trailer
   of the checked-out commit) emits the base instructions **plus** the matching role overlay

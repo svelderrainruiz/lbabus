@@ -5,10 +5,27 @@ All notable changes to the shared cross-plane coordination-bus CLI are documente
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-Releases are published as immutable, SemVer-tagged GitHub Releases (`collab-cli-vX.Y.Z`)
-so the WIN and LINUX planes install the exact same pinned version and cannot drift.
+Releases are published as immutable, SemVer-tagged GitHub Releases of svelderrainruiz/lbabus (`vX.Y.Z`; releases up
+to 0.15.12 were `collab-cli-vX.Y.Z` in labview-benchmark-actor) so the WIN and LINUX planes install the exact same
+pinned version and cannot drift.
 
 ## [Unreleased]
+
+## [0.16.0] - 2026-11-15
+
+### Changed
+
+- **Breaking:** the environment contract drops the prefix inherited from vi-history-suite: `COLLAB_AGENT`,
+  `COLLAB_TRANSPORT`, `COLLAB_NET_HOSTS`, `COLLAB_NET_LOG`, `COLLAB_OWNER`, `COLLAB_REPO`, `COLLAB_TITLE`, and
+  `COLLAB_CATEGORY` (#3). Set the new names; the old ones are no longer read. Earlier entries below use the new names.
+- `COLLAB_OWNER` defaults to `svelderrainruiz` (was the retired `LabVIEW-Community-CI-CD` organization) and `COLLAB_REPO`
+  to `lbabus`, so `lbabus defect` posts to this repository's defect log, issue #8 (`LBABUS_DEFECT_ISSUE`). The old
+  default #7 is a merged pull request in the extension repository.
+- The CI harness's hermetic environment strips `COLLAB_*` instead of the old prefix.
+- `selfcheck` recognises the `vX.Y.Z` release tags of this repository (and the earlier `collab-cli-vX.Y.Z` tags), so it
+  still detects a newer release, and its rebuild instructions name the `vX.Y.Z` tag.
+- Documentation names the live `net` envelope `labview-benchmark-actor/bus-msg@1` and no longer uses the retired
+  Discussion-era message name (#4).
 
 ## [0.15.12] — 2026-08-10
 
