@@ -1,0 +1,52 @@
+name: lbabus CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  harness:
+    name: harness (${{ matrix.target }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ci-rg, ci-no-rg, ci-musl, ci-musl-native, ci-stress, ci-agents, ci-docs]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build the ${{ matrix.target }} harness stage
+        run: docker build -f tools/collab-cli/ci/Dockerfile --target "${{ matrix.target }}" .
+
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73  # v6.1.0
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build and check the embedded agents and docs
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          dotnet build tools/collab-cli/LbaBus.csproj -c Release -o out -nologo
+          if ($LASTEXITCODE -ne 0) { throw "build failed ($LASTEXITCODE)" }
+          dotnet out/lbabus.dll version
+          dotnet out/lbabus.dll agents --out "$env:RUNNER_TEMP/AGENTS.md"
+          dotnet out/lbabus.dll agents --check "$env:RUNNER_TEMP/AGENTS.md"
+          if ($LASTEXITCODE -ne 0) { throw 'agents round-trip failed' }
+          foreach ($id in 'guide', 'srs', 'rtm') {
+            dotnet out/lbabus.dll docs show $id --out "$env:RUNNER_TEMP/$id.out"
+            dotnet out/lbabus.dll docs show $id --check "$env:RUNNER_TEMP/$id.out"
+            if ($LASTEXITCODE -ne 0) { throw "docs $id round-trip failed" }
+          }

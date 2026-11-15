@@ -1,0 +1,28 @@
+{
+  "template": "https://github.com/svelderrainruiz/repo-standards-review-consumer-kit",
+  "commit": "bd857ce599dfaac8fb72df6f5c5b49cd61604e2c",
+  "checkout": "v0.4.2",
+  "context": {
+    "cookiecutter": {
+      "repo_name": "lbabus",
+      "forge": "github",
+      "github_runs_on": "ubuntu-latest",
+      "default_branches": "main,develop",
+      "gitlab_stage": "test",
+      "script_dirs": "",
+      "lf_paths": "",
+      "exempt_paths": "",
+      "rsr_tag": "v0.4.2",
+      "rsr_commit": "5a3aa9da4b64bd5cc24cd2c6a21253947bca7575",
+      "workbench_image": "registry.gitlab.com/svelderrainruiz/repo-standards-review/assurance-workbench@sha256:913bba59240fc9981b0fa45decc92a4e9881041b29969030e85b050c46b3cfe5",
+      "__kit_dir": "lbabus",
+      "_copy_without_render": [
+        ".repo-standards-review/check_consumer.py"
+      ],
+      "_gitattributes": ".gitattributes",
+      "_template": "https://github.com/svelderrainruiz/repo-standards-review-consumer-kit",
+      "_commit": "bd857ce599dfaac8fb72df6f5c5b49cd61604e2c"
+    }
+  },
+  "directory": null
+}
