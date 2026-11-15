@@ -1,7 +1,7 @@
 # lbabus Docker-CI edge-case harness
 
 A declarative, dependency-free harness that runs the `lbabus` CLI through edge cases in a hermetic
-container and **gates every `collab-cli-v*` release** on the result. It grows over time; **both planes
+container and **gates every `vX.Y.Z` release** on the result. It grows over time; **both planes
 add cases** (one file per case, so nobody edits a shared manifest and there are no merge conflicts).
 
 ## Layout

@@ -76,7 +76,7 @@ lbabus defect --message "..."      # report a tooling defect to the dedicated lo
 1. **Ripgrep-only search.** `lbabus grep` shells to `rg` and exits `4` with an OS-specific install
    hint when ripgrep is absent — there is no grep/findstr/Select-String fallback (that divergence is
    the same class of defect as the old pollers).
-2. **Version currency.** `post` and `wait` query the latest published `collab-cli-v*` release and
+2. **Version currency.** `post` and `wait` query the latest published `vX.Y.Z` release and
    **refuse to run** (exit `3`) when the local build is stale, printing the exact local-rebuild
    recipe. Bypass for offline/dev with `LBABUS_SKIP_VERSION_CHECK=1`. `selfcheck` reports the same.
 3. **Defect reporting.** `lbabus defect` appends a plane-tagged report to the single tooling
@@ -117,7 +117,7 @@ Auth token: `GH_TOKEN` / `GITHUB_TOKEN`, else `gh auth token`.
 ## Build & release
 
 - Build: `dotnet build -c Release`
-- Release: the release workflow (a `collab-cli-vX.Y.Z` tag matching `<Version>` in `LbaBus.csproj`, packing the
+- Release: the release workflow (a `vX.Y.Z` tag matching `<Version>` in `LbaBus.csproj`, packing the
   tool + self-contained binaries into an immutable GitHub Release) is being ported from labview-benchmark-actor;
   see [svelderrainruiz/lbabus#1](https://github.com/svelderrainruiz/lbabus/issues/1).
 

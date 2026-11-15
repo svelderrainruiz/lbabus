@@ -36,7 +36,7 @@ Documentation is hardened the same way `AGENTS.md` is (v0.6.1 → v0.6.2 …). T
    structure and discipline.
 3. **PR** the change to `tools/collab-cli/docs/DOCS.md` (this file). Bank recurring cross-plane findings
    on the shared hardening feedback discussion (#28), which `AGENTS.md` and docs share.
-4. **Release**: the docs owner bumps `LbaBus.csproj <Version>` and cuts `collab-cli-vX.Y.Z`; the
+4. **Release**: the docs owner bumps `LbaBus.csproj <Version>` and cuts `vX.Y.Z`; the
    `ci-docs` harness stage verifies the embed round-trip + drift, then the release publishes.
 
 ## Information-item model (grow toward, as content warrants)
