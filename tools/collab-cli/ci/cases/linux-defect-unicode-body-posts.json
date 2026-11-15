@@ -5,8 +5,8 @@
   "requiresMock": true,
   "env": {
     "GH_TOKEN": "ci-dummy-token-not-validated",
-    "VIHS_COLLAB_OWNER": "lbabus-ci",
-    "VIHS_COLLAB_REPO": "fixture-defect",
+    "COLLAB_OWNER": "lbabus-ci",
+    "COLLAB_REPO": "fixture-defect",
     "LBABUS_DEFECT_ISSUE": "7"
   },
   "args": ["defect", "--title", "unicode sink café ↔ 日本語", "--message", "Line one → arrow.\nLine two accent café.\nLine three CJK 日本語 tail-preserved."],

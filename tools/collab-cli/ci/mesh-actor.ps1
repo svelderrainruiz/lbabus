@@ -4,7 +4,7 @@
   Per-actor workload for the isolated-actor lbabus TCP/UDP MESH test.
 
 .DESCRIPTION
-  Each container runs ONE copy under a distinct actor identity (VIHS_COLLAB_AGENT), fully ISOLATED --
+  Each container runs ONE copy under a distinct actor identity (COLLAB_AGENT), fully ISOLATED --
   no shared volume, no shared store. Actors coordinate ONLY through collab-cli's TCP/UDP coordination
   bus (`lbabus net`, ADR-0003/0004, the bus-msg@1 envelope), resolving each other by container name on
   a user-defined docker network.
@@ -37,7 +37,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$actor = $env:VIHS_COLLAB_AGENT
+$actor = $env:COLLAB_AGENT
 if ([string]::IsNullOrWhiteSpace($actor)) { $actor = "actor-$PID" }
 
 # Node type (source|sink|both, default both): a source only EMITS, a sink only COLLECTS, both is the symmetric

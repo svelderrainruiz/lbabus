@@ -2,7 +2,7 @@
 # Isolated-actor lbabus TCP/UDP MESH test (Linux host, Linux-container engine) -- parity of ci/mesh-windows.ps1.
 #
 # Launches N containers from the lbabus Linux verification image on a user-defined `bridge` network, each a
-# DISTINCT named actor (VIHS_COLLAB_AGENT), fully ISOLATED -- no shared volume, no shared store. The actors
+# DISTINCT named actor (COLLAB_AGENT), fully ISOLATED -- no shared volume, no shared store. The actors
 # coordinate ONLY through collab-cli's TCP/UDP bus (`lbabus net`, see ci/mesh-actor.sh), resolving each other
 # by container name. Each actor must hear from EVERY other actor over BOTH TCP (reliable frames) and UDP
 # (presence beacons); when every actor exits 0, a complete TCP+UDP mesh formed.
@@ -53,7 +53,7 @@ trap cleanup EXIT
 # Launch each isolated actor on the shared network; they reach each other only by name over `lbabus net`.
 for n in $names; do
   docker run -d --name "$n" --hostname "$n" --network "$net" \
-    -e "VIHS_COLLAB_AGENT=$n" -e "MESH_PEERS=$peers" \
+    -e "COLLAB_AGENT=$n" -e "MESH_PEERS=$peers" \
     -e "TIMEOUT_SEC=$tcp_timeout" -e "UDP_TIMEOUT_SEC=$udp_timeout" -e "SEND_RETRIES=90" \
     -e "UDP_BEACONS=1" \
     "$IMAGE" >/dev/null

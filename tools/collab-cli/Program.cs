@@ -244,14 +244,18 @@ internal static class CommandRouter
         return 0;
     }
 
+    // Releases are vX.Y.Z tags in svelderrainruiz/lbabus; releases up to 0.15.12 were collab-cli-vX.Y.Z tags in
+    // labview-benchmark-actor, so both forms are recognised when COLLAB_REPO points there.
+    private static readonly string[] ReleaseTagPrefixes = { "collab-cli-v", "v" };
+
     private static string? LatestPublishedVersion(GitHubGraphQL gh, Config cfg)
     {
-        const string prefix = "collab-cli-v";
         Version? best = null;
         string? bestStr = null;
         foreach (string tag in gh.ListReleaseTags(cfg))
         {
-            if (!tag.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            string? prefix = ReleaseTagPrefixes.FirstOrDefault(p => tag.StartsWith(p, StringComparison.OrdinalIgnoreCase));
+            if (prefix is null)
             {
                 continue;
             }
@@ -268,9 +272,9 @@ internal static class CommandRouter
     }
 
     private static string RebuildRecipe(Config cfg, string latest) =>
-        $"  git fetch --tags && git checkout collab-cli-v{latest} && cd tools/collab-cli && dotnet build -c Release\n" +
+        $"  git fetch --tags && git checkout v{latest} && cd tools/collab-cli && dotnet build -c Release\n" +
         $"  # or reinstall the pinned global tool from the release nupkg:\n" +
-        $"  gh release download collab-cli-v{latest} --repo {cfg.Owner}/{cfg.Repo} --pattern '*.nupkg' --dir <dir> && " +
+        $"  gh release download v{latest} --repo {cfg.Owner}/{cfg.Repo} --pattern '*.nupkg' --dir <dir> && " +
         $"dotnet tool update --global LabViewBenchmarkActor.CollabBus --version {latest} --add-source <dir>";
 
     private static string CurrentVersion()
@@ -316,15 +320,15 @@ internal static class CommandRouter
                 glab>=1.25 — a missing or below-pin tool exits 4 with an install hint.
               * search is ripgrep-only (`lbabus grep`); rg absent or below its pin => exit 4 + install hint.
               * `selfcheck` reports version currency against the latest published release (exit 3 if a newer
-                collab-cli-v* is out, exit 4 on a dep miss).
+                vX.Y.Z release is out, exit 4 on a dep miss).
               * report tooling defects via `lbabus defect` to the dedicated log issue
-                (LBABUS_DEFECT_ISSUE, default #7).
+                (LBABUS_DEFECT_ISSUE, default #8).
 
             CONFIG (env)
-              VIHS_COLLAB_OWNER      default LabVIEW-Community-CI-CD
-              VIHS_COLLAB_REPO       default labview-benchmark-actor
-              VIHS_COLLAB_AGENT      default WIN on Windows, LINUX otherwise
-              LBABUS_DEFECT_ISSUE    default #7   (the `lbabus defect` sink)
+              COLLAB_OWNER      default svelderrainruiz
+              COLLAB_REPO       default lbabus
+              COLLAB_AGENT      default WIN on Windows, LINUX otherwise
+              LBABUS_DEFECT_ISSUE    default #8   (the `lbabus defect` sink)
               LBABUS_GITHUB_API      override the GitHub API base (hermetic CI mock; fail-closed if unreachable)
 
             AUTH: GH_TOKEN / GITHUB_TOKEN, else `gh auth token`.
