@@ -82,3 +82,14 @@ jobs:
           fi
           gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --title "lbabus ${VERSION}" \
             --notes-file "$notes" --verify-tag
+
+      - name: Require an immutable release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          immutable="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${GITHUB_REF_NAME}" --jq '.immutable')"
+          if [ "$immutable" != "true" ]; then
+            echo "::error::Release ${GITHUB_REF_NAME} is not immutable; enable immutable releases for this repository." >&2
+            exit 1
+          fi
