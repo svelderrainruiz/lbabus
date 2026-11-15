@@ -22,14 +22,14 @@ FAKE
 chmod +x "$fake"
 
 source_trace="$tmp/source.trace"
-LBA_FAKE_TRACE="$source_trace" LBABUS="$fake" VIHS_COLLAB_AGENT=source NODE_TYPE=source \
+LBA_FAKE_TRACE="$source_trace" LBABUS="$fake" COLLAB_AGENT=source NODE_TYPE=source \
   MESH_PEERS=source,sink1,sink2 MESH_LISTENERS=sink1,sink2 MESH_EMITTERS= \
   TIMEOUT_SEC=2 UDP_TIMEOUT_SEC=2 SEND_RETRIES=1 SEND_RETRY_MS=1 UDP_BEACONS=1 MESH_OBSERVERS= \
   bash "$worker" >/dev/null
 grep -q '^net send --hosts sink1,sink2 ' "$source_trace"
 
 both_trace="$tmp/both.trace"
-LBA_FAKE_TRACE="$both_trace" LBABUS="$fake" VIHS_COLLAB_AGENT=both NODE_TYPE=both \
+LBA_FAKE_TRACE="$both_trace" LBABUS="$fake" COLLAB_AGENT=both NODE_TYPE=both \
   MESH_PEERS=source,both,sink MESH_LISTENERS=sink MESH_EMITTERS=source \
   TIMEOUT_SEC=2 UDP_TIMEOUT_SEC=2 SEND_RETRIES=1 SEND_RETRY_MS=1 UDP_BEACONS=1 MESH_OBSERVERS= \
   bash "$worker" >/dev/null
@@ -37,7 +37,7 @@ grep -q '^net listen --tcp 7420 --echo --count 1 ' "$both_trace"
 grep -q '^net send --hosts sink ' "$both_trace"
 
 no_emitter_trace="$tmp/no-emitter.trace"
-LBA_FAKE_TRACE="$no_emitter_trace" LBABUS="$fake" VIHS_COLLAB_AGENT=both NODE_TYPE=both \
+LBA_FAKE_TRACE="$no_emitter_trace" LBABUS="$fake" COLLAB_AGENT=both NODE_TYPE=both \
   MESH_PEERS=both,sink MESH_LISTENERS=sink MESH_EMITTERS= \
   TIMEOUT_SEC=2 UDP_TIMEOUT_SEC=2 SEND_RETRIES=1 SEND_RETRY_MS=1 UDP_BEACONS=1 MESH_OBSERVERS= \
   bash "$worker" >/dev/null

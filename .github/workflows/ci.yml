@@ -35,6 +35,12 @@ jobs:
           persist-credentials: false
       - name: Mesh actor typed-peer routing
         run: bash tools/collab-cli/ci/mesh-actor-typed-peers.selftest.sh
+      - name: No VIHS identifiers or Discussion-era message name
+        run: |
+          if git grep -nE 'VIHS|vihs-collab-msg' -- ':!.github/workflows/ci.yml'; then
+            echo "::error::Remove the VIHS prefix (#3) and the retired vihs-collab-msg name (#4)." >&2
+            exit 1
+          fi
 
   windows:
     runs-on: windows-latest

@@ -108,7 +108,7 @@ internal static class Ripgrep
 internal static class DefectSink
 {
     /// <summary>Dedicated tooling defect-log issue in the coordination repo.</summary>
-    public const int DefaultIssue = 7;
+    public const int DefaultIssue = 8;
 
     public static int ResolveIssue()
     {

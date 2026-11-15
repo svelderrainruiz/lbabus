@@ -156,13 +156,13 @@ internal static class Program
             psi.ArgumentList.Add(a);
         }
 
-        // Hermetic env: strip any ambient coordination variables so a stray LBABUS_*/VIHS_*/token on the
+        // Hermetic env: strip any ambient coordination variables so a stray LBABUS_*/COLLAB_*/token on the
         // host cannot contaminate a case (e.g. a leaked LBABUS_SKIP_VERSION_CHECK silently bypassing the
         // version gate). Each case then declares exactly the env it needs. The shared mock endpoint is
         // injected only for mock-requiring cases; offline cases run with no endpoint (or their own).
         foreach (string key in psi.Environment.Keys
                      .Where(k => k.StartsWith("LBABUS_", StringComparison.OrdinalIgnoreCase)
-                              || k.StartsWith("VIHS_", StringComparison.OrdinalIgnoreCase)
+                              || k.StartsWith("COLLAB_", StringComparison.OrdinalIgnoreCase)
                               || k.Equals("GH_TOKEN", StringComparison.OrdinalIgnoreCase)
                               || k.Equals("GITHUB_TOKEN", StringComparison.OrdinalIgnoreCase))
                      .ToList())

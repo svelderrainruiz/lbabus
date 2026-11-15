@@ -13,7 +13,7 @@ made "who watches vs. who acts" ambiguous and dropped messages. `lbabus`:
 
 - Talks to the GitHub GraphQL API **in-process** (no `gh api` shell-out, no pager) — identical on
   Windows and Linux.
-- Gates `wait`/`poll` on the **server comment timestamp** AND the parsed `vihs-collab-msg@v1` `agent`
+- Gates `wait`/`poll` on the **server comment timestamp** AND the parsed collab-message `agent`
   field. Both agents post as the same GitHub user, so author-based gating was never reliable; the
   embedded `agent` is authoritative.
 - Uses the GitHub **server `createdAt` as the single authoritative clock** for every timing decision
@@ -28,8 +28,8 @@ made "who watches vs. who acts" ambiguous and dropped messages. `lbabus`:
 Both planes install the **same** released version:
 
 ```sh
-# From the GitHub Release assets for the tag collab-cli-vX.Y.Z:
-gh release download collab-cli-vX.Y.Z --repo LabVIEW-Community-CI-CD/labview-benchmark-actor --pattern '*.nupkg' --dir .
+# From the GitHub Release assets for the tag vX.Y.Z:
+gh release download vX.Y.Z --repo svelderrainruiz/lbabus --pattern '*.nupkg' --dir .
 dotnet tool install --global LabViewBenchmarkActor.CollabBus --version X.Y.Z --add-source .
 ```
 
@@ -76,11 +76,11 @@ lbabus defect --message "..."      # report a tooling defect to the dedicated lo
 1. **Ripgrep-only search.** `lbabus grep` shells to `rg` and exits `4` with an OS-specific install
    hint when ripgrep is absent — there is no grep/findstr/Select-String fallback (that divergence is
    the same class of defect as the old pollers).
-2. **Version currency.** `post` and `wait` query the latest published `collab-cli-v*` release and
+2. **Version currency.** `post` and `wait` query the latest published `vX.Y.Z` release and
    **refuse to run** (exit `3`) when the local build is stale, printing the exact local-rebuild
    recipe. Bypass for offline/dev with `LBABUS_SKIP_VERSION_CHECK=1`. `selfcheck` reports the same.
 3. **Defect reporting.** `lbabus defect` appends a plane-tagged report to the single tooling
-   defect-log issue (`LBABUS_DEFECT_ISSUE`, default `#7`); the top-level error handler points agents
+   defect-log issue (`LBABUS_DEFECT_ISSUE`, default `#8` in svelderrainruiz/lbabus); the top-level error handler points agents
    at it. This keeps every tooling defect in one durable place instead of scattered inline.
 
 ## Response deltas (symmetric)
@@ -94,7 +94,7 @@ lbabus delta                     # counterpart's response deltas (WIN -> LINUX, 
 lbabus delta --agent WIN --tail 5
 ```
 
-With no `--agent`, `delta` measures the **counterpart of `VIHS_COLLAB_AGENT`** (WIN measures LINUX, LINUX measures WIN). Pass `--agent <A>` to measure a specific agent (including yourself).
+With no `--agent`, `delta` measures the **counterpart of `COLLAB_AGENT`** (WIN measures LINUX, LINUX measures WIN). Pass `--agent <A>` to measure a specific agent (including yourself).
 
 For each message from the target agent it prints:
 - **gap** = time since that agent's *previous* message (their cadence).
@@ -104,12 +104,12 @@ For each message from the target agent it prints:
 
 | Variable | Default |
 | --- | --- |
-| `VIHS_COLLAB_OWNER` | `LabVIEW-Community-CI-CD` |
-| `VIHS_COLLAB_REPO` | `labview-benchmark-actor` |
-| `VIHS_COLLAB_CATEGORY` | `General` |
-| `VIHS_COLLAB_TITLE` | `labview-benchmark-actor coordination bus (WIN <-> LINUX)` |
-| `VIHS_COLLAB_AGENT` | `WIN` on Windows, `LINUX` otherwise |
-| `LBABUS_DEFECT_ISSUE` | `7` |
+| `COLLAB_OWNER` | `svelderrainruiz` |
+| `COLLAB_REPO` | `lbabus` |
+| `COLLAB_CATEGORY` | `General` |
+| `COLLAB_TITLE` | `labview-benchmark-actor coordination bus (WIN <-> LINUX)` |
+| `COLLAB_AGENT` | `WIN` on Windows, `LINUX` otherwise |
+| `LBABUS_DEFECT_ISSUE` | `8` |
 | `LBABUS_SKIP_VERSION_CHECK` | _(unset)_ — set to bypass the version guard |
 
 Auth token: `GH_TOKEN` / `GITHUB_TOKEN`, else `gh auth token`.
@@ -117,7 +117,7 @@ Auth token: `GH_TOKEN` / `GITHUB_TOKEN`, else `gh auth token`.
 ## Build & release
 
 - Build: `dotnet build -c Release`
-- Release: the release workflow (a `collab-cli-vX.Y.Z` tag matching `<Version>` in `LbaBus.csproj`, packing the
+- Release: the release workflow (a `vX.Y.Z` tag matching `<Version>` in `LbaBus.csproj`, packing the
   tool + self-contained binaries into an immutable GitHub Release) is being ported from labview-benchmark-actor;
   see [svelderrainruiz/lbabus#1](https://github.com/svelderrainruiz/lbabus/issues/1).
 
