@@ -117,9 +117,9 @@ Auth token: `GH_TOKEN` / `GITHUB_TOKEN`, else `gh auth token`.
 ## Build & release
 
 - Build: `dotnet build -c Release`
-- Release: push a tag `collab-cli-vX.Y.Z` (matching `<Version>` in `LbaBus.csproj`). The
-  [`collab-cli-release`](../../.github/workflows/collab-cli-release.yml) workflow packs the tool +
-  self-contained binaries and publishes them to an immutable GitHub Release.
+- Release: the release workflow (a `collab-cli-vX.Y.Z` tag matching `<Version>` in `LbaBus.csproj`, packing the
+  tool + self-contained binaries into an immutable GitHub Release) is being ported from labview-benchmark-actor;
+  see [svelderrainruiz/lbabus#1](https://github.com/svelderrainruiz/lbabus/issues/1).
 
 SemVer is the contract: the two planes agree on a version, install it, and only bump by explicit
 coordination on the bus.
