@@ -321,9 +321,9 @@ internal static class CommandRouter
                 (LBABUS_DEFECT_ISSUE, default #7).
 
             CONFIG (env)
-              VIHS_COLLAB_OWNER      default LabVIEW-Community-CI-CD
-              VIHS_COLLAB_REPO       default labview-benchmark-actor
-              VIHS_COLLAB_AGENT      default WIN on Windows, LINUX otherwise
+              COLLAB_OWNER      default svelderrainruiz
+              COLLAB_REPO       default labview-benchmark-actor
+              COLLAB_AGENT      default WIN on Windows, LINUX otherwise
               LBABUS_DEFECT_ISSUE    default #7   (the `lbabus defect` sink)
               LBABUS_GITHUB_API      override the GitHub API base (hermetic CI mock; fail-closed if unreachable)
 

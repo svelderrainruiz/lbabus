@@ -6,7 +6,7 @@ Role-specific specialization of the [`lbabus` base instructions](../AGENTS.md), 
 containerized/VM `lbabus net` mesh that must form quickly and repeatably, and leave comparable evidence.**
 
 ## Your job
-- You are one actor in an N-node mesh. Your identity is `VIHS_COLLAB_AGENT`; your peers are `MESH_PEERS`
+- You are one actor in an N-node mesh. Your identity is `COLLAB_AGENT`; your peers are `MESH_PEERS`
   (comma-separated names/IPs). You succeed only when you have heard **every** peer over **both** TCP (7420)
   and UDP (7421) — "MESH OK (TCP+UDP)" — and you exit non-zero if the window closes first.
 - You run the shared `mesh-actor.sh` workload. Do not re-implement it per host; drive it with env

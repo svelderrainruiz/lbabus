@@ -270,7 +270,7 @@ internal static class Program
         // Point the child's lease store at our scratch dir + set its agent identity.
         psi.Environment[OperatingSystem.IsWindows() ? "LOCALAPPDATA" : "XDG_STATE_HOME"] =
             Directory.GetParent(Directory.GetParent(_leasesDir)!.FullName)!.FullName;
-        psi.Environment["VIHS_COLLAB_AGENT"] = agent;
+        psi.Environment["COLLAB_AGENT"] = agent;
 
         return Process.Start(psi) ?? throw new InvalidOperationException("Process.Start returned null");
     }

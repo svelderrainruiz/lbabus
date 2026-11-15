@@ -5,7 +5,7 @@
 
 .DESCRIPTION
   Launches N containers from the lbabus Windows verification image on a user-defined docker network,
-  each a DISTINCT named actor (VIHS_COLLAB_AGENT), fully ISOLATED -- no shared volume, no shared store.
+  each a DISTINCT named actor (COLLAB_AGENT), fully ISOLATED -- no shared volume, no shared store.
   The actors coordinate ONLY through collab-cli's TCP/UDP bus (`lbabus net`, see ci/mesh-actor.ps1),
   resolving each other by container name. Each actor must hear from EVERY other actor over BOTH TCP
   (reliable frames) and UDP (presence beacons); when every actor exits 0, a complete TCP+UDP mesh formed.
@@ -47,7 +47,7 @@ docker network create -d nat $net | Out-Null
 try {
   # Launch each isolated actor on the shared network; they reach each other only by name over `lbabus net`.
   foreach ($n in $names) {
-    docker run -d --name $n --network $net -e "VIHS_COLLAB_AGENT=$n" $Image `
+    docker run -d --name $n --network $net -e "COLLAB_AGENT=$n" $Image `
       -Peers $peers -TimeoutSec $tcpTimeout -UdpTimeoutSec $udpTimeout -SendRetries 90 | Out-Null
   }
 

@@ -13,7 +13,7 @@ made "who watches vs. who acts" ambiguous and dropped messages. `lbabus`:
 
 - Talks to the GitHub GraphQL API **in-process** (no `gh api` shell-out, no pager) — identical on
   Windows and Linux.
-- Gates `wait`/`poll` on the **server comment timestamp** AND the parsed `vihs-collab-msg@v1` `agent`
+- Gates `wait`/`poll` on the **server comment timestamp** AND the parsed collab-message `agent`
   field. Both agents post as the same GitHub user, so author-based gating was never reliable; the
   embedded `agent` is authoritative.
 - Uses the GitHub **server `createdAt` as the single authoritative clock** for every timing decision
@@ -94,7 +94,7 @@ lbabus delta                     # counterpart's response deltas (WIN -> LINUX, 
 lbabus delta --agent WIN --tail 5
 ```
 
-With no `--agent`, `delta` measures the **counterpart of `VIHS_COLLAB_AGENT`** (WIN measures LINUX, LINUX measures WIN). Pass `--agent <A>` to measure a specific agent (including yourself).
+With no `--agent`, `delta` measures the **counterpart of `COLLAB_AGENT`** (WIN measures LINUX, LINUX measures WIN). Pass `--agent <A>` to measure a specific agent (including yourself).
 
 For each message from the target agent it prints:
 - **gap** = time since that agent's *previous* message (their cadence).
@@ -104,11 +104,11 @@ For each message from the target agent it prints:
 
 | Variable | Default |
 | --- | --- |
-| `VIHS_COLLAB_OWNER` | `LabVIEW-Community-CI-CD` |
-| `VIHS_COLLAB_REPO` | `labview-benchmark-actor` |
-| `VIHS_COLLAB_CATEGORY` | `General` |
-| `VIHS_COLLAB_TITLE` | `labview-benchmark-actor coordination bus (WIN <-> LINUX)` |
-| `VIHS_COLLAB_AGENT` | `WIN` on Windows, `LINUX` otherwise |
+| `COLLAB_OWNER` | `LabVIEW-Community-CI-CD` |
+| `COLLAB_REPO` | `labview-benchmark-actor` |
+| `COLLAB_CATEGORY` | `General` |
+| `COLLAB_TITLE` | `labview-benchmark-actor coordination bus (WIN <-> LINUX)` |
+| `COLLAB_AGENT` | `WIN` on Windows, `LINUX` otherwise |
 | `LBABUS_DEFECT_ISSUE` | `7` |
 | `LBABUS_SKIP_VERSION_CHECK` | _(unset)_ — set to bypass the version guard |
 

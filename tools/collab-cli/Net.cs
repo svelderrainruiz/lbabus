@@ -209,11 +209,11 @@ internal static class NetCommands
     /// </summary>
     private static int CmdPoll(ArgMap a)
     {
-        string? logPath = a.Get("log") ?? Environment.GetEnvironmentVariable("VIHS_COLLAB_NET_LOG");
+        string? logPath = a.Get("log") ?? Environment.GetEnvironmentVariable("COLLAB_NET_LOG");
         int tail = a.GetInt("tail", 10);
         string? type = a.Get("type");
         string? task = a.Get("task");
-        if (string.IsNullOrEmpty(logPath)) { Console.Error.WriteLine("[net poll] no receive-log configured (set busNetLog / VIHS_COLLAB_NET_LOG) -- nothing to poll (live-only default, ADR-0045)"); return 0; }
+        if (string.IsNullOrEmpty(logPath)) { Console.Error.WriteLine("[net poll] no receive-log configured (set busNetLog / COLLAB_NET_LOG) -- nothing to poll (live-only default, ADR-0045)"); return 0; }
         if (!File.Exists(logPath)) { Console.Error.WriteLine($"[net poll] no local receive-log at {logPath} -- nothing heard yet (live-only, ADR-0040)"); return 0; }
         var frames = new List<BusEnvelope>();
         foreach (string line in File.ReadLines(logPath))
@@ -422,7 +422,7 @@ internal static class NetCommands
         // loopback attempt. Callers set this when on the net transport but no busNetHosts is configured.
         if (a.Get("skip-if-no-peer") is not null && a.Get("hosts") is null && a.Get("host") is null)
         {
-            Console.Error.WriteLine("[net send] no peer configured (set busNetHosts / VIHS_COLLAB_NET_HOSTS) -- skipping the announce (live-only default, ADR-0045)");
+            Console.Error.WriteLine("[net send] no peer configured (set busNetHosts / COLLAB_NET_HOSTS) -- skipping the announce (live-only default, ADR-0045)");
             return 0;
         }
         IReadOnlyList<string> hosts = HostList(a, "127.0.0.1");
