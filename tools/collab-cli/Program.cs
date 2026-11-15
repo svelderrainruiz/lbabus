@@ -318,13 +318,13 @@ internal static class CommandRouter
               * `selfcheck` reports version currency against the latest published release (exit 3 if a newer
                 collab-cli-v* is out, exit 4 on a dep miss).
               * report tooling defects via `lbabus defect` to the dedicated log issue
-                (LBABUS_DEFECT_ISSUE, default #7).
+                (LBABUS_DEFECT_ISSUE, default #8).
 
             CONFIG (env)
               COLLAB_OWNER      default svelderrainruiz
-              COLLAB_REPO       default labview-benchmark-actor
+              COLLAB_REPO       default lbabus
               COLLAB_AGENT      default WIN on Windows, LINUX otherwise
-              LBABUS_DEFECT_ISSUE    default #7   (the `lbabus defect` sink)
+              LBABUS_DEFECT_ISSUE    default #8   (the `lbabus defect` sink)
               LBABUS_GITHUB_API      override the GitHub API base (hermetic CI mock; fail-closed if unreachable)
 
             AUTH: GH_TOKEN / GITHUB_TOKEN, else `gh auth token`.

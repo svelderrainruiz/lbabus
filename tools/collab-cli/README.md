@@ -80,7 +80,7 @@ lbabus defect --message "..."      # report a tooling defect to the dedicated lo
    **refuse to run** (exit `3`) when the local build is stale, printing the exact local-rebuild
    recipe. Bypass for offline/dev with `LBABUS_SKIP_VERSION_CHECK=1`. `selfcheck` reports the same.
 3. **Defect reporting.** `lbabus defect` appends a plane-tagged report to the single tooling
-   defect-log issue (`LBABUS_DEFECT_ISSUE`, default `#7`); the top-level error handler points agents
+   defect-log issue (`LBABUS_DEFECT_ISSUE`, default `#8` in svelderrainruiz/lbabus); the top-level error handler points agents
    at it. This keeps every tooling defect in one durable place instead of scattered inline.
 
 ## Response deltas (symmetric)
@@ -104,8 +104,8 @@ For each message from the target agent it prints:
 
 | Variable | Default |
 | --- | --- |
-| `COLLAB_OWNER` | `LabVIEW-Community-CI-CD` |
-| `COLLAB_REPO` | `labview-benchmark-actor` |
+| `COLLAB_OWNER` | `svelderrainruiz` |
+| `COLLAB_REPO` | `lbabus` |
 | `COLLAB_CATEGORY` | `General` |
 | `COLLAB_TITLE` | `labview-benchmark-actor coordination bus (WIN <-> LINUX)` |
 | `COLLAB_AGENT` | `WIN` on Windows, `LINUX` otherwise |

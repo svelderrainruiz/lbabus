@@ -22,7 +22,7 @@ public sealed class Config
     public static Config FromEnvironment()
     {
         string owner = Env("COLLAB_OWNER", "svelderrainruiz");
-        string repo = Env("COLLAB_REPO", "labview-benchmark-actor");
+        string repo = Env("COLLAB_REPO", "lbabus");
         string agent = DeriveAgent();
         return new Config(owner, repo, agent);
     }
