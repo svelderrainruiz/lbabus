@@ -1,0 +1,84 @@
+name: lbabus release
+
+# Push a tag vX.Y.Z that matches <Version> in tools/collab-cli/LbaBus.csproj. The full CI (every harness stage, the
+# routing selftest, the Windows build) gates the release; the job then builds the dotnet tool package and the
+# self-contained linux-x64 and win-x64 binaries, attests them, and publishes an immutable GitHub Release.
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    needs: [ci]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # create the release and attach its assets
+      id-token: write # sign the artifact attestation
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73  # v6.1.0
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Check the tag matches the project version
+        id: ver
+        run: |
+          set -eu
+          version="${GITHUB_REF_NAME#v}"
+          project="$(sed -n 's|.*<Version>\(.*\)</Version>.*|\1|p' tools/collab-cli/LbaBus.csproj)"
+          if [ "$version" != "$project" ]; then
+            echo "::error::Tag ${GITHUB_REF_NAME} does not match <Version>${project}</Version> in LbaBus.csproj." >&2
+            exit 1
+          fi
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Build the release assets
+        env:
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -eu
+          project=tools/collab-cli/LbaBus.csproj
+          dotnet pack "$project" -c Release -o artifacts
+          dotnet publish "$project" -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/linux-x64
+          dotnet publish "$project" -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/win-x64
+          mkdir -p dist
+          cp artifacts/*.nupkg dist/
+          cp artifacts/linux-x64/lbabus "dist/lbabus-${VERSION}-linux-x64"
+          cp artifacts/win-x64/lbabus.exe "dist/lbabus-${VERSION}-win-x64.exe"
+          (cd dist && sha256sum -- * > SHA256SUMS)
+          cat dist/SHA256SUMS
+
+      - name: Attest the release assets
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8  # v4.2.2
+        with:
+          subject-path: 'dist/*'
+
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.ver.outputs.version }}
+        run: |
+          set -eu
+          notes="${RUNNER_TEMP}/release-notes.md"
+          awk -v ver="$VERSION" '
+            $0 ~ ("^## \\[" ver "\\]") { grab=1; print; next }
+            grab && /^## \[/ { exit }
+            grab { print }
+          ' tools/collab-cli/CHANGELOG.md > "$notes"
+          if [ ! -s "$notes" ]; then
+            echo "::error::tools/collab-cli/CHANGELOG.md has no [${VERSION}] section." >&2
+            exit 1
+          fi
+          gh release create "$GITHUB_REF_NAME" dist/* --repo "$GITHUB_REPOSITORY" --title "lbabus ${VERSION}" \
+            --notes-file "$notes" --verify-tag
