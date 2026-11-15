@@ -28,8 +28,8 @@ made "who watches vs. who acts" ambiguous and dropped messages. `lbabus`:
 Both planes install the **same** released version:
 
 ```sh
-# From the GitHub Release assets for the tag collab-cli-vX.Y.Z:
-gh release download collab-cli-vX.Y.Z --repo LabVIEW-Community-CI-CD/labview-benchmark-actor --pattern '*.nupkg' --dir .
+# From the GitHub Release assets for the tag vX.Y.Z:
+gh release download vX.Y.Z --repo svelderrainruiz/lbabus --pattern '*.nupkg' --dir .
 dotnet tool install --global LabViewBenchmarkActor.CollabBus --version X.Y.Z --add-source .
 ```
 
@@ -109,7 +109,7 @@ For each message from the target agent it prints:
 | `COLLAB_CATEGORY` | `General` |
 | `COLLAB_TITLE` | `labview-benchmark-actor coordination bus (WIN <-> LINUX)` |
 | `COLLAB_AGENT` | `WIN` on Windows, `LINUX` otherwise |
-| `LBABUS_DEFECT_ISSUE` | `7` |
+| `LBABUS_DEFECT_ISSUE` | `8` |
 | `LBABUS_SKIP_VERSION_CHECK` | _(unset)_ — set to bypass the version guard |
 
 Auth token: `GH_TOKEN` / `GITHUB_TOKEN`, else `gh auth token`.

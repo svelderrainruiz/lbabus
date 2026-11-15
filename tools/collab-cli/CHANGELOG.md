@@ -21,6 +21,8 @@ so the WIN and LINUX planes install the exact same pinned version and cannot dri
   to `lbabus`, so `lbabus defect` posts to this repository's defect log, issue #8 (`LBABUS_DEFECT_ISSUE`). The old
   default #7 is a merged pull request in the extension repository.
 - The CI harness's hermetic environment strips `COLLAB_*` instead of the old prefix.
+- `selfcheck` recognises the `vX.Y.Z` release tags of this repository (and the earlier `collab-cli-vX.Y.Z` tags), so it
+  still detects a newer release, and its rebuild instructions name the `vX.Y.Z` tag.
 - Documentation names the live `net` envelope `labview-benchmark-actor/bus-msg@1` and no longer uses the retired
   Discussion-era message name (#4).
 
