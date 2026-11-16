@@ -11,6 +11,17 @@ pinned version and cannot drift.
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-11-16
+
+### Changed
+
+- `lbabus docs show srs|rtm` now prints lbabus's own requirements instead of the extension's full specification.
+  These are the 8 LabVIEW Benchmark Actor requirements allocated to lbabus: the non-superseded ones whose code
+  references include a file of lbabus's code. Each keeps its ID and LBA's text, verbatim from
+  svelderrainruiz/labview-benchmark-actor at `3534e4b`, and the RTM's code references are limited to lbabus's own.
+  LBA's specification stays the source of truth for the whole system. The governed pages are in the
+  [lbabus wiki](https://github.com/svelderrainruiz/lbabus/wiki) (VITechnologies/projectbuddy#336).
+
 ## [0.16.0] - 2026-11-15
 
 ### Changed

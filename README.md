@@ -13,8 +13,10 @@ This repository was split out of
 - The layout is unchanged from the extension repository (`tools/collab-cli/`), so the build paths, embedded
   resources, and Docker harness stages work as before. The extension's requirements-coverage stage (`ci-reqs`)
   and its Vagrantfile checks stayed with the extension. Flattening the layout is a later change.
-- `docs/requirements/srs.md` and `rtm.csv` are the extension's requirements, which `lbabus docs show srs|rtm`
-  embeds. Until `lbabus` has its own specification they are a snapshot from the extension at the split commit.
+- `docs/requirements/srs.md` and `rtm.csv` are lbabus's requirements, which `lbabus docs show srs|rtm` embeds.
+  They are allocated from the extension's specification: the non-superseded requirements whose code references
+  include a file of lbabus's code, with their IDs and text kept. The extension's specification stays the source of
+  truth for the whole system. The governed pages are in the [lbabus wiki](https://github.com/svelderrainruiz/lbabus/wiki).
 - The extension's release-governance files (the release agreement, the reviewer allowlist, and their
   verifiers) stay in the extension repository.
 - labview-benchmark-actor 1.5.2 still ships its in-tree copy; its next release consumes a pinned `lbabus`
