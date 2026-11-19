@@ -11,6 +11,12 @@ pinned version and cannot drift.
 
 ## [Unreleased]
 
+### Fixed
+
+- **`lbabus net listen --bind` fails closed** — an invalid IP, an empty string or a hostname now exits 1 with
+  `--bind: invalid IP '…'` (like `net beacon`) instead of silently listening on 0.0.0.0. The default applies only when
+  `--bind` is absent. Harness cases `net-listen-bind-*-fails-closed`.
+
 ## [0.17.0] - 2026-11-16
 
 ### Changed
