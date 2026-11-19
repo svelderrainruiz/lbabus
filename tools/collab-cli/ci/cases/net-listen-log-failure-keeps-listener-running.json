@@ -1,0 +1,65 @@
+{
+  "name": "net-listen-log-failure-keeps-listener-running",
+  "owner": "LINUX",
+  "description": "LBA-REQ-060: a receive-log append error is reported but never breaks the listener.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1",
+    "COLLAB_AGENT": "CI-SENDER"
+  },
+  "steps": [
+    {
+      "args": [
+        "net",
+        "listen",
+        "--tcp",
+        "17433",
+        "--bind",
+        "127.0.0.1",
+        "--count",
+        "1",
+        "--timeout",
+        "20",
+        "--log",
+        "{scratch}/no-such-dir/receive.jsonl"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "background": true,
+      "expect": {
+        "exitCode": 0,
+        "stdoutContains": [
+          "CI-SENDER #",
+          "NOTE task:T-LOGERR — still delivered"
+        ],
+        "stderrContains": [
+          "[net] receive-log append failed",
+          "listener stopped; received 1 message(s)"
+        ]
+      }
+    }
+  ],
+  "args": [
+    "net",
+    "send",
+    "--host",
+    "127.0.0.1",
+    "--tcp",
+    "17433",
+    "--type",
+    "NOTE",
+    "--task",
+    "T-LOGERR",
+    "--message",
+    "still delivered",
+    "--retries",
+    "20",
+    "--retry-ms",
+    "250"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0
+  }
+}

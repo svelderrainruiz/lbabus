@@ -60,9 +60,23 @@ each child so a stray host variable (e.g. a leaked `LBABUS_SKIP_VERSION_CHECK`) 
     "stdoutNotContains": ["\u001b["],  // e.g. no ANSI escapes
     "stderrContains": ["substr"],
     "stdoutEquals": "exact (CRLF-normalized)"
-  }
+  },
+  // optional, for multi-process cases (all use {scratch}, a per-case temp directory removed afterwards):
+  "files": { "msg.txt": { "text": "hello" }, "big.txt": { "repeat": "x", "count": 1000000 } },
+  "steps": [                           // lbabus runs executed in order before the main command
+    { "args": ["net", "listen", "--tcp", "17431", "--count", "1", "--log", "{scratch}/log.jsonl"],
+      "background": true,              // true → keeps running; its "expect" is checked when it exits (30 s cap)
+      "waitForBackground": false,      // true → wait for the background steps to exit before this step
+      "env": { "KEY": "VALUE" },
+      "expect": { "exitCode": 0 } }    // a foreground step that misses its "expect" fails the case
+  ],
+  "waitForBackground": true            // main command waits for the background steps first
 }
 ```
+
+A case with `steps` is how the harness covers behaviour that needs two processes, such as a listener that
+writes a receive-log and a sender that feeds it (`net-verdict-types-roundtrip-over-tcp`). Senders use
+`--retries`/`--retry-ms` so they wait for the listener instead of racing it.
 
 For mock-requiring cases the runner injects `LBABUS_GITHUB_API=<endpoint>` automatically; the case just
 declares the fixture repo it targets via `COLLAB_OWNER` / `COLLAB_REPO`.

@@ -1,0 +1,67 @@
+{
+  "name": "net-send-refuses-frame-over-one-mib",
+  "owner": "LINUX",
+  "description": "LBA-REQ-098: a frame whose JSON exceeds the 1 MiB bus-msg@1 limit is refused with a clear error, not sent.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1",
+    "COLLAB_AGENT": "CI-SENDER"
+  },
+  "files": {
+    "huge.txt": {
+      "repeat": "x",
+      "count": 1100000
+    }
+  },
+  "steps": [
+    {
+      "args": [
+        "net",
+        "listen",
+        "--tcp",
+        "17436",
+        "--bind",
+        "127.0.0.1",
+        "--count",
+        "1",
+        "--timeout",
+        "6"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "background": true,
+      "expect": {
+        "exitCode": 0,
+        "stderrContains": [
+          "listener stopped; received 0 message(s)"
+        ]
+      }
+    }
+  ],
+  "args": [
+    "net",
+    "send",
+    "--host",
+    "127.0.0.1",
+    "--tcp",
+    "17436",
+    "--type",
+    "NOTE",
+    "--task",
+    "T-HUGE",
+    "--message-file",
+    "{scratch}/huge.txt",
+    "--retries",
+    "20",
+    "--retry-ms",
+    "250"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 1,
+    "stderrContains": [
+      "exceeds 1048576 max"
+    ]
+  }
+}

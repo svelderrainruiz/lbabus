@@ -1,0 +1,25 @@
+{
+  "name": "net-send-skip-if-no-peer-exits-0-with-hint",
+  "owner": "LINUX",
+  "description": "LBA-REQ-065: net send --skip-if-no-peer with no peer configured exits 0 with a hint and sends nothing.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "send",
+    "--skip-if-no-peer",
+    "--type",
+    "NOTE",
+    "--message",
+    "unconfigured"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stderrContains": [
+      "[net send] no peer configured (set busNetHosts / COLLAB_NET_HOSTS) -- skipping the announce"
+    ]
+  }
+}

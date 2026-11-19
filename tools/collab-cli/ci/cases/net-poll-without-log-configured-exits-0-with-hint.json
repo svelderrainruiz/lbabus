@@ -1,0 +1,20 @@
+{
+  "name": "net-poll-without-log-configured-exits-0-with-hint",
+  "owner": "LINUX",
+  "description": "LBA-REQ-065: net poll with no receive-log configured exits 0 with a hint.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "poll"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stderrContains": [
+      "[net poll] no receive-log configured (set busNetLog / COLLAB_NET_LOG)"
+    ]
+  }
+}

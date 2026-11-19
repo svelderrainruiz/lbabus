@@ -1,0 +1,24 @@
+{
+  "name": "net-poll-missing-log-file-exits-0-with-hint",
+  "owner": "LINUX",
+  "description": "LBA-REQ-065: net poll with a receive-log that does not exist yet exits 0 with a hint.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "poll",
+    "--log",
+    "{scratch}/never-written.jsonl"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutEquals": "",
+    "stderrContains": [
+      "no local receive-log at",
+      "nothing heard yet"
+    ]
+  }
+}

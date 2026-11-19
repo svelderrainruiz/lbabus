@@ -1,0 +1,88 @@
+{
+  "name": "net-send-delivers-frame-just-under-one-mib",
+  "owner": "LINUX",
+  "description": "LBA-REQ-098: a frame whose JSON stays within the 1 MiB bus-msg@1 limit is delivered.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "files": {
+    "big.txt": {
+      "repeat": "x",
+      "count": 1000000
+    }
+  },
+  "steps": [
+    {
+      "args": [
+        "net",
+        "listen",
+        "--tcp",
+        "17435",
+        "--bind",
+        "127.0.0.1",
+        "--count",
+        "1",
+        "--timeout",
+        "20",
+        "--log",
+        "{scratch}/receive.jsonl"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "background": true,
+      "expect": {
+        "exitCode": 0,
+        "stderrContains": [
+          "listener stopped; received 1 message(s)"
+        ]
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17435",
+        "--type",
+        "NOTE",
+        "--task",
+        "T-BIG",
+        "--message-file",
+        "{scratch}/big.txt",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-SENDER"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    }
+  ],
+  "waitForBackground": true,
+  "args": [
+    "net",
+    "poll",
+    "--log",
+    "{scratch}/receive.jsonl",
+    "--task",
+    "T-BIG",
+    "--tail",
+    "1"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "NOTE task:T-BIG"
+    ]
+  }
+}

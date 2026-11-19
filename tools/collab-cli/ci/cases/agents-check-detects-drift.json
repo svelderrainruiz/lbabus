@@ -1,0 +1,22 @@
+{
+  "name": "agents-check-detects-drift",
+  "owner": "LINUX",
+  "description": "LBA-REQ-012: agents --check exits non-zero for a copy that differs from the embedded canonical.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "agents",
+    "--check",
+    "ci/fixtures/sample.txt"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 3,
+    "stderrContains": [
+      "DRIFT",
+      "does not match the embedded canonical"
+    ]
+  }
+}

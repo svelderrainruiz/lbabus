@@ -1,0 +1,39 @@
+{
+  "name": "agents-out-then-check-roundtrip",
+  "owner": "LINUX",
+  "description": "LBA-REQ-012: agents --out materializes the embedded instructions and agents --check accepts that copy.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "steps": [
+    {
+      "args": [
+        "agents",
+        "--out",
+        "{scratch}/AGENTS.md"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "expect": {
+        "exitCode": 0,
+        "stdoutContains": [
+          "agents: wrote"
+        ]
+      }
+    }
+  ],
+  "args": [
+    "agents",
+    "--check",
+    "{scratch}/AGENTS.md"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "matches embedded canonical"
+    ]
+  }
+}

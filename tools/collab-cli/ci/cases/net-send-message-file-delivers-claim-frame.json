@@ -1,0 +1,88 @@
+{
+  "name": "net-send-message-file-delivers-claim-frame",
+  "owner": "LINUX",
+  "description": "LBA-REQ-099: net send --message-file delivers a CLAIM frame, with its sender and task, to a listener's receive-log.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "files": {
+    "request.json": {
+      "text": "{\"nonce\":\"n-1\"}"
+    }
+  },
+  "steps": [
+    {
+      "args": [
+        "net",
+        "listen",
+        "--tcp",
+        "17434",
+        "--bind",
+        "127.0.0.1",
+        "--count",
+        "1",
+        "--timeout",
+        "20",
+        "--log",
+        "{scratch}/receive.jsonl"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "background": true,
+      "expect": {
+        "exitCode": 0,
+        "stderrContains": [
+          "listener stopped; received 1 message(s)"
+        ]
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17434",
+        "--type",
+        "CLAIM",
+        "--task",
+        "T-CLAIM",
+        "--message-file",
+        "{scratch}/request.json",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-ACTOR"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    }
+  ],
+  "waitForBackground": true,
+  "args": [
+    "net",
+    "poll",
+    "--log",
+    "{scratch}/receive.jsonl",
+    "--type",
+    "CLAIM",
+    "--task",
+    "T-CLAIM"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "CI-ACTOR",
+      "CLAIM task:T-CLAIM — {\"nonce\":\"n-1\"}"
+    ]
+  }
+}

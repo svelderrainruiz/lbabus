@@ -1,0 +1,106 @@
+{
+  "name": "cli-help-lists-no-discussion-subcommands",
+  "owner": "LINUX",
+  "description": "LBA-REQ-067: the CLI help lists the remaining subcommands and none of init/post/poll/wait/delta, and each removed subcommand is an unknown command.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "steps": [
+    {
+      "args": [
+        "init"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "expect": {
+        "exitCode": 1,
+        "stderrContains": [
+          "lbabus: unknown command 'init'"
+        ]
+      }
+    },
+    {
+      "args": [
+        "post"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "expect": {
+        "exitCode": 1,
+        "stderrContains": [
+          "lbabus: unknown command 'post'"
+        ]
+      }
+    },
+    {
+      "args": [
+        "poll"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "expect": {
+        "exitCode": 1,
+        "stderrContains": [
+          "lbabus: unknown command 'poll'"
+        ]
+      }
+    },
+    {
+      "args": [
+        "wait"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "expect": {
+        "exitCode": 1,
+        "stderrContains": [
+          "lbabus: unknown command 'wait'"
+        ]
+      }
+    },
+    {
+      "args": [
+        "delta"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "expect": {
+        "exitCode": 1,
+        "stderrContains": [
+          "lbabus: unknown command 'delta'"
+        ]
+      }
+    }
+  ],
+  "args": [
+    "help"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "lbabus version",
+      "lbabus capabilities",
+      "lbabus selfcheck",
+      "lbabus grep",
+      "lbabus defect",
+      "lbabus net <listen|send|poll|beacon|ping>",
+      "lbabus resource",
+      "lbabus agents",
+      "lbabus docs"
+    ],
+    "stdoutNotContains": [
+      "lbabus init",
+      "lbabus post",
+      "lbabus poll",
+      "lbabus wait",
+      "lbabus delta"
+    ]
+  }
+}
