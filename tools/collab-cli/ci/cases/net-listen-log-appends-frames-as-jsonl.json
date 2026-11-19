@@ -99,8 +99,6 @@
   "cwd": "tools/collab-cli",
   "expect": {
     "exitCode": 0,
-    "stdoutContains": [
-      "2"
-    ]
+    "stdoutEquals": "2\n"
   }
 }

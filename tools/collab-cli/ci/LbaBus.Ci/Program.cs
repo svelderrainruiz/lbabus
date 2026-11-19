@@ -138,6 +138,7 @@ internal static class Program
         // in args and env values names it.
         string scratch = Path.Combine(Path.GetTempPath(), "lbabus-ci-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(scratch);
+        var background = new List<Running>();
         try
         {
             foreach ((string name, CaseFile file) in tc.Files ?? new())
@@ -154,7 +155,6 @@ internal static class Program
             }
 
             var checks = new List<CheckResult>();
-            var background = new List<Running>();
             foreach ((CaseStep step, int index) in (tc.Steps ?? Array.Empty<CaseStep>()).Select((s, i) => (s, i)))
             {
                 if (step.WaitForBackground)
@@ -196,11 +196,18 @@ internal static class Program
         }
         finally
         {
+            // A step that was never awaited (an exception above) must not outlive the case with its port and log open.
+            foreach (Running running in background.Where(r => !r.Process.HasExited))
+            {
+                running.Process.Kill(entireProcessTree: true);
+                running.Process.WaitForExit();
+            }
+
             try
             {
                 Directory.Delete(scratch, recursive: true);
             }
-            catch (IOException)
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
             {
             }
         }
@@ -234,11 +241,10 @@ internal static class Program
         stdout = running.Stdout.GetAwaiter().GetResult();
         stderr = running.Stderr.GetAwaiter().GetResult();
         int exit = running.Process.ExitCode;
-        if (running.Expect is { } expect)
-        {
-            string prefix = running.Label == "main" ? "" : running.Label + " ";
-            checks.AddRange(Judge(expect, exit, stdout, stderr).Select(c => c with { Kind = prefix + c.Kind }));
-        }
+        // A step that declares no expectation must still exit 0.
+        CaseExpect expect = running.Expect ?? new CaseExpect(0, null, null, null, null);
+        string prefix = running.Label == "main" ? "" : running.Label + " ";
+        checks.AddRange(Judge(expect, exit, stdout, stderr).Select(c => c with { Kind = prefix + c.Kind }));
 
         return exit;
     }
