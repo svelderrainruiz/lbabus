@@ -1,0 +1,22 @@
+{
+  "name": "net-send-rejects-unknown-envelope-type",
+  "owner": "LINUX",
+  "description": "LBA-REQ-059: the net envelope type set names RESOLVED, REFINE and BLOCKED; any other type fails closed.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "send",
+    "--type",
+    "FOO"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 1,
+    "stderrContains": [
+      "invalid --type 'FOO'. Valid: CLAIM, ACK, HANDOFF, DONE, PROGRESS, NOTE, HELLO, RESOLVED, REFINE, BLOCKED"
+    ]
+  }
+}

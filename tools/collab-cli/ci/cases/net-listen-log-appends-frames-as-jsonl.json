@@ -1,0 +1,106 @@
+{
+  "name": "net-listen-log-appends-frames-as-jsonl",
+  "owner": "LINUX",
+  "description": "LBA-REQ-060: net listen --log appends each received frame to a JSONL receive-log of bus-msg@1 envelopes.",
+  "requiresMock": false,
+  "requiresRipgrep": true,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "steps": [
+    {
+      "args": [
+        "net",
+        "listen",
+        "--tcp",
+        "17432",
+        "--bind",
+        "127.0.0.1",
+        "--count",
+        "2",
+        "--timeout",
+        "20",
+        "--log",
+        "{scratch}/receive.jsonl"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "background": true,
+      "expect": {
+        "exitCode": 0,
+        "stderrContains": [
+          "listener stopped; received 2 message(s)"
+        ]
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17432",
+        "--type",
+        "NOTE",
+        "--task",
+        "T-LOG",
+        "--message",
+        "first",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-SENDER"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17432",
+        "--type",
+        "DONE",
+        "--task",
+        "T-LOG",
+        "--message",
+        "second",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-SENDER"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    }
+  ],
+  "waitForBackground": true,
+  "args": [
+    "grep",
+    "-c",
+    "\"schema\":\"labview-benchmark-actor/bus-msg@1\"",
+    "{scratch}/receive.jsonl"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "2"
+    ]
+  }
+}

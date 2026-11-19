@@ -1,0 +1,29 @@
+{
+  "name": "net-poll-tail-limits-to-last-frames",
+  "owner": "LINUX",
+  "description": "LBA-REQ-060: net poll --tail N prints only the last N frames.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "poll",
+    "--log",
+    "ci/fixtures/receive-log.jsonl",
+    "--tail",
+    "1"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "#4 DONE task:T-TWO — delta"
+    ],
+    "stdoutNotContains": [
+      "#1 ",
+      "#2 ",
+      "#3 "
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "net-send-to-dead-loopback-fails-closed",
+  "owner": "LINUX",
+  "description": "LBA-REQ-065: without --skip-if-no-peer a send to an unreachable peer fails closed, so only the flag makes an unconfigured install a no-op.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "send",
+    "--host",
+    "127.0.0.1",
+    "--tcp",
+    "1",
+    "--await",
+    "1",
+    "--type",
+    "NOTE",
+    "--message",
+    "x"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 1,
+    "stderrContains": [
+      "TCP connect 127.0.0.1:1 failed",
+      "TCP send failed to 1/1 host(s)"
+    ]
+  }
+}

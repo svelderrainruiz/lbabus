@@ -1,0 +1,137 @@
+{
+  "name": "net-verdict-types-roundtrip-over-tcp",
+  "owner": "LINUX",
+  "description": "LBA-REQ-059/060: RESOLVED, REFINE and BLOCKED frames sent over TCP reach a listening actor's receive-log and net poll --task reads them back.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "steps": [
+    {
+      "args": [
+        "net",
+        "listen",
+        "--tcp",
+        "17431",
+        "--bind",
+        "127.0.0.1",
+        "--count",
+        "3",
+        "--timeout",
+        "20",
+        "--log",
+        "{scratch}/receive.jsonl"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1"
+      },
+      "background": true,
+      "expect": {
+        "exitCode": 0,
+        "stderrContains": [
+          "listener stopped; received 3 message(s)"
+        ]
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17431",
+        "--type",
+        "RESOLVED",
+        "--task",
+        "T-VERDICT",
+        "--message",
+        "pass",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-SENDER"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17431",
+        "--type",
+        "REFINE",
+        "--task",
+        "T-VERDICT",
+        "--message",
+        "revise",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-SENDER"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    },
+    {
+      "args": [
+        "net",
+        "send",
+        "--host",
+        "127.0.0.1",
+        "--tcp",
+        "17431",
+        "--type",
+        "BLOCKED",
+        "--task",
+        "T-VERDICT",
+        "--message",
+        "stop",
+        "--retries",
+        "20",
+        "--retry-ms",
+        "250"
+      ],
+      "env": {
+        "LBABUS_SKIP_VERSION_CHECK": "1",
+        "COLLAB_AGENT": "CI-SENDER"
+      },
+      "expect": {
+        "exitCode": 0
+      }
+    }
+  ],
+  "waitForBackground": true,
+  "args": [
+    "net",
+    "poll",
+    "--log",
+    "{scratch}/receive.jsonl",
+    "--task",
+    "T-VERDICT"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "CI-SENDER",
+      "RESOLVED task:T-VERDICT",
+      "REFINE task:T-VERDICT",
+      "BLOCKED task:T-VERDICT"
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+{"schema":"labview-benchmark-actor/bus-msg@1","sessionId":"default","senderId":"FIXTURE-A","seq":1,"ts":{"wall":"2026-01-01T00:00:01.000Z"},"type":"NOTE","task":"T-ONE","payload":"alpha"}
+{"schema":"labview-benchmark-actor/bus-msg@1","sessionId":"default","senderId":"FIXTURE-B","seq":2,"ts":{"wall":"2026-01-01T00:00:02.000Z"},"type":"CLAIM","task":"T-ONE","payload":"bravo"}
+{"schema":"labview-benchmark-actor/bus-msg@1","sessionId":"default","senderId":"FIXTURE-A","seq":3,"ts":{"wall":"2026-01-01T00:00:03.000Z"},"type":"NOTE","task":"T-TWO","payload":"charlie"}
+{"schema":"labview-benchmark-actor/bus-msg@1","sessionId":"default","senderId":"FIXTURE-B","seq":4,"ts":{"wall":"2026-01-01T00:00:04.000Z"},"type":"DONE","task":"T-TWO","payload":"delta"}

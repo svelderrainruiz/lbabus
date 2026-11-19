@@ -1,0 +1,22 @@
+{
+  "name": "agents-prints-version-tagged-sha256-header",
+  "owner": "LINUX",
+  "description": "LBA-REQ-012: lbabus agents prints the embedded base instructions behind a sha256-stamped, version-tagged header.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "agents"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "<!-- lbabus-agents v",
+      "sha256:",
+      "canonical base instructions embedded in lbabus",
+      "# labview-benchmark-actor"
+    ]
+  }
+}

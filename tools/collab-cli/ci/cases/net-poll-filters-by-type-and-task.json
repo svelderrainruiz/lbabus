@@ -1,0 +1,31 @@
+{
+  "name": "net-poll-filters-by-type-and-task",
+  "owner": "LINUX",
+  "description": "LBA-REQ-060: net poll --type and --task print only the matching frames of the receive-log.",
+  "requiresMock": false,
+  "env": {
+    "LBABUS_SKIP_VERSION_CHECK": "1"
+  },
+  "args": [
+    "net",
+    "poll",
+    "--log",
+    "ci/fixtures/receive-log.jsonl",
+    "--type",
+    "note",
+    "--task",
+    "T-ONE"
+  ],
+  "cwd": "tools/collab-cli",
+  "expect": {
+    "exitCode": 0,
+    "stdoutContains": [
+      "FIXTURE-A #1 NOTE task:T-ONE — alpha"
+    ],
+    "stdoutNotContains": [
+      "#2 ",
+      "#3 ",
+      "#4 "
+    ]
+  }
+}
