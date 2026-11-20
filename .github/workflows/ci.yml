@@ -35,6 +35,8 @@ jobs:
           persist-credentials: false
       - name: Mesh actor typed-peer routing
         run: bash tools/collab-cli/ci/mesh-actor-typed-peers.selftest.sh
+      - name: Source guards moved from labview-benchmark-actor
+        run: bash tools/collab-cli/ci/source-guards.sh
       - name: No VIHS identifiers or Discussion-era message name
         run: |
           if git grep -nE 'VIHS|vihs-collab-msg' -- ':!.github/workflows/ci.yml'; then
