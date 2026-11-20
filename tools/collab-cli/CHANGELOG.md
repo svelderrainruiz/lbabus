@@ -11,6 +11,10 @@ pinned version and cannot drift.
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-11-19
+
+No behaviour change. The release carries the harness cases added in #24 and the source guards, so labview-benchmark-actor can pin a tag that contains every check it moved here (labview-benchmark-actor#57).
+
 ### Added
 
 - `ci/source-guards.sh`, run by the `selftests` job: the static source checks that labview-benchmark-actor used to
