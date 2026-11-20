@@ -11,6 +11,13 @@ pinned version and cannot drift.
 
 ## [Unreleased]
 
+### Added
+
+- `ci/source-guards.sh`, run by the `selftests` job: the static source checks that labview-benchmark-actor used to
+  run against its in-tree copy of lbabus (stable dependency resolver, no Discussion transport surface, net dispatch,
+  embedded requirement docs). They move here so that repository can consume lbabus only as a pinned release
+  (labview-benchmark-actor#57).
+
 ## [0.17.0] - 2026-11-19
 
 ### Changed
